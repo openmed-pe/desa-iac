@@ -50,12 +50,12 @@ resource "aws_codebuild_project" "openmed-codebuild-apply" {
 
 resource "aws_codepipeline" "openmed-desa-iac-pipeline" {
 
-  name     = "tf-cicd"
-  role_arn = aws_iam_role.tf-codepipeline-role.arn
+  name     = "openmed-desa-iac-pipeline"
+  role_arn = aws_iam_role.role-codepipeline-desa.arn
 
   artifact_store {
     type     = "S3"
-    location = aws_s3_bucket.codepipeline_artifacts.id
+    location = aws_s3_bucket.openmed-desa-artifacts.id
   }
 
   stage {
@@ -70,7 +70,7 @@ resource "aws_codepipeline" "openmed-desa-iac-pipeline" {
       configuration = {
         FullRepositoryId     = "openmed-pe/desa-iac"
         BranchName           = "master"
-        ConnectionArn        = var.codestar_connector_credentials
+        ConnectionArn        = var.codestart_connector_credentials
         OutputArtifactFormat = "CODE_ZIP"
       }
     }
@@ -86,7 +86,7 @@ resource "aws_codepipeline" "openmed-desa-iac-pipeline" {
       owner           = "AWS"
       input_artifacts = ["tf-code"]
       configuration = {
-        ProjectName = "tf-cicd-plan"
+        ProjectName = "openmed-codebuild-plan"
       }
     }
   }
@@ -101,7 +101,7 @@ resource "aws_codepipeline" "openmed-desa-iac-pipeline" {
       owner           = "AWS"
       input_artifacts = ["tf-code"]
       configuration = {
-        ProjectName = "tf-cicd-apply"
+        ProjectName = "openmed-codebuild-apply"
       }
     }
   }
