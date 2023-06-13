@@ -66,12 +66,13 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
   stage {
     name = "Commit"
     action {
-      name            = "Build"
-      category        = "Build"
-      provider        = "CodeBuild"
-      version         = "1"
-      owner           = "AWS"
-      input_artifacts = ["api-code"]
+      name             = "Build"
+      category         = "Build"
+      provider         = "CodeBuild"
+      version          = "1"
+      owner            = "AWS"
+      input_artifacts  = ["api-code"]
+      output_artifacts = ["api-code"]
       configuration = {
         ProjectName = "openmed-codebuild-buildApi"
       }

@@ -10,9 +10,8 @@ phases:
     commands:
       - mkdir artifact
       - mv dist/ artifact/
-      - mv env.yaml artifact/
       - mv package.json artifact/
       - mv openmed-api.service artifact/
 artifacts:
   files:
-    - artifact/
+    - artifact/*
