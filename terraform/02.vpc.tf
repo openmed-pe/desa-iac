@@ -5,6 +5,6 @@ resource "aws_vpc" "openmed-vpc-desa" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "openmed-vpc-main"
+    Name = "openmed-vpc-desa"
   }
 }
