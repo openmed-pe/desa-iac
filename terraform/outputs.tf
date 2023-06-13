@@ -8,7 +8,7 @@ output "db_address" {
 }
 
 output "s3_endpoint" {
-  value = aws_s3_bucket.openmed-desa-public-bucket.website_endpoint
+  value = aws_s3_bucket.openmed-desa-public-bucket.website_domain
 }
 
 

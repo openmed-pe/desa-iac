@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - mkdir artifact
+      - mv -r dist/ artifact/
+      - mv env.yml artifact/
+      - mv package.json artifact/
+      - mv openmed-api.service artifact/
+artifacts:
+  files:
+    - artifact/
