@@ -72,7 +72,7 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
       version          = "1"
       owner            = "AWS"
       input_artifacts  = ["api-code"]
-      output_artifacts = ["api-code"]
+      output_artifacts = ["api-build-code"]
       configuration = {
         ProjectName = "openmed-codebuild-buildApi"
       }
