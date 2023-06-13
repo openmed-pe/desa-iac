@@ -1,5 +1,5 @@
 resource "aws_security_group" "openmed-desa-ec2-sg" {
-  name        = "openmed-desa-sg"
+  name        = "openmed-desa-ec2-sg"
   description = "Allow API Access"
   vpc_id      = aws_vpc.openmed-vpc-desa.id
 
