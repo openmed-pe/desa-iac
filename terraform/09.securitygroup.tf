@@ -26,7 +26,7 @@ resource "aws_security_group" "openmed-desa-ec2-sg" {
 }
 
 resource "aws_security_group" "openmed-desa-db-sg" {
-  name        = "openmed-desa-sg"
+  name        = "openmed-desa-db-sg"
   description = "Allow API Access"
   vpc_id      = aws_vpc.openmed-vpc-desa.id
 
