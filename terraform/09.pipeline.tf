@@ -46,7 +46,7 @@ resource "aws_codebuild_project" "openmed-codebuild-deployEc2" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "node:14.7.0-alpine3.10"
+    image                       = "buildo/alpine-ssh:latest"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
     registry_credential {
