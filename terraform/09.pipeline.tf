@@ -35,6 +35,32 @@ resource "aws_codebuild_project" "openmed-codebuild-buildApi" {
   }
 }
 
+resource "aws_codebuild_project" "openmed-codebuild-deployEc2" {
+  name         = "openmed-codebuild-deployEc2"
+  description  = "Deploy api for desa environment"
+  service_role = data.aws_iam_role.role-codebuild-desa.arn
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type                = "BUILD_GENERAL1_SMALL"
+    image                       = "node:14.7.0-alpine3.10"
+    type                        = "LINUX_CONTAINER"
+    image_pull_credentials_type = "SERVICE_ROLE"
+    registry_credential {
+      credential          = var.dockerhub_credentials
+      credential_provider = "SECRETS_MANAGER"
+    }
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = file("../devops/pipelines/deployEc2-buildspec.yml")
+  }
+}
+
 resource "aws_codepipeline" "openmed-desa-api-pipeline" {
 
   name     = "openmed-desa-api-pipeline"
@@ -79,4 +105,18 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
     }
   }
 
+  stage {
+    name = "Deploy"
+    action {
+      name            = "Build"
+      category        = "Build"
+      provider        = "CodeBuild"
+      version         = "1"
+      owner           = "AWS"
+      input_artifacts = ["api-build-code"]
+      configuration = {
+        ProjectName = "openmed-codebuild-deployEc2"
+      }
+    }
+  }
 }
