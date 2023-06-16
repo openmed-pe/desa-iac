@@ -1,14 +1,3 @@
-data "aws_s3_bucket" "openmed-desa-artifacts" {
-  bucket = "openmed-desa-artifacts"
-}
-
-data "aws_iam_role" "role-codepipeline-desa" {
-  name = "role-codepipeline-desa"
-}
-
-data "aws_iam_role" "role-codebuild-desa" {
-  name = "role-codebuild-desa"
-}
 
 resource "aws_codebuild_project" "openmed-codebuild-buildApi" {
   name         = "openmed-codebuild-buildApi"
@@ -35,29 +24,31 @@ resource "aws_codebuild_project" "openmed-codebuild-buildApi" {
   }
 }
 
-resource "aws_codebuild_project" "openmed-codebuild-deployEc2" {
-  name         = "openmed-codebuild-deployEc2"
-  description  = "Deploy api for desa environment"
-  service_role = data.aws_iam_role.role-codebuild-desa.arn
+# create a CodeDeploy application
+resource "aws_codedeploy_app" "openmed-codedeploy-buildApi" {
+  name = "openmed-codedeploy-buildApi"
+}
 
-  artifacts {
-    type = "CODEPIPELINE"
+# create a deployment group
+resource "aws_codedeploy_deployment_group" "openmed-codedeploy-buildApi" {
+  app_name              = aws_codedeploy_app.openmed-codedeploy-buildApi.name
+  deployment_group_name = "codedeploy-buildApi-group"
+  service_role_arn      = aws_iam_role.role-codedeploy-desa.arn
+
+  deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
+
+  ec2_tag_filter = {
+    key   = "Name"
+    type  = "KEY_AND_VALUE"
+    value = "openmed-desa-api"
   }
 
-  environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "buildo/alpine-ssh:latest"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "SERVICE_ROLE"
-    registry_credential {
-      credential          = var.dockerhub_credentials
-      credential_provider = "SECRETS_MANAGER"
-    }
-  }
-
-  source {
-    type      = "CODEPIPELINE"
-    buildspec = file("../devops/pipelines/deployEc2-buildspec.yml")
+  # trigger a rollback on deployment failure event
+  auto_rollback_configuration {
+    enabled = true
+    events = [
+      "DEPLOYMENT_FAILURE",
+    ]
   }
 }
 
@@ -90,7 +81,7 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
   }
 
   stage {
-    name = "Commit"
+    name = "Build"
     action {
       name             = "Build"
       category         = "Build"
@@ -110,12 +101,12 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
     action {
       name            = "Build"
       category        = "Build"
-      provider        = "CodeBuild"
+      provider        = "CodeDeploy"
       version         = "1"
       owner           = "AWS"
       input_artifacts = ["api-build-code"]
       configuration = {
-        ProjectName = "openmed-codebuild-deployEc2"
+        ProjectName = "openmed-codedeploy-buildApi"
       }
     }
   }

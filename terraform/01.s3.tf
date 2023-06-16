@@ -27,3 +27,21 @@ resource "aws_s3_bucket_acl" "openmed-desa-public-bucket-acl" {
   bucket = aws_s3_bucket.openmed-desa-public-bucket.id
   acl    = "private"
 }
+
+resource "aws_s3_bucket_policy" "openmed-desa-public-bucket" {
+  bucket = aws_s3_bucket.openmed-desa-public-bucket.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::openmed-desa-public-bucket/*"
+      }
+  ]
+}
+POLICY
+}
