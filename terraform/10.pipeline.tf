@@ -30,20 +30,21 @@ resource "aws_codedeploy_app" "openmed-codedeploy-buildApi" {
 }
 
 # create a deployment group
-resource "aws_codedeploy_deployment_group" "openmed-codedeploy-buildApi" {
+resource "aws_codedeploy_deployment_group" "openmed-codedeploy-buildApi-group" {
   app_name              = aws_codedeploy_app.openmed-codedeploy-buildApi.name
   deployment_group_name = "codedeploy-buildApi-group"
   service_role_arn      = aws_iam_role.role-codedeploy-desa.arn
 
-  deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
+  deployment_config_name = "CodeDeployDefault.OneAtATime"
 
-  ec2_tag_filter = {
-    key   = "Name"
-    type  = "KEY_AND_VALUE"
-    value = "openmed-desa-api"
+  ec2_tag_set {
+    ec2_tag_filter {
+      key   = "Name"
+      type  = "KEY_AND_VALUE"
+      value = "openmed-desa-api"
+    }
   }
 
-  # trigger a rollback on deployment failure event
   auto_rollback_configuration {
     enabled = true
     events = [
