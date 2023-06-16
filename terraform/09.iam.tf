@@ -34,7 +34,7 @@ resource "aws_iam_role" "role-codedeploy-desa" {
 
 resource "aws_iam_role_policy_attachment" "role-codedeploy-desa-attachment" {
   role       = aws_iam_role.role-codedeploy-desa.id
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRole"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
 resource "aws_iam_role" "role-ec2codedeploy-desa" {
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment1" 
 
 resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment2" {
   role       = aws_iam_role.role-ec2codedeploy-desa.id
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2RoleforAWSCodeDeploy"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
 }
 
 resource "aws_iam_instance_profile" "ec2codedeploy-desa-profile" {
