@@ -24,6 +24,11 @@ resource "aws_iam_role" "role-codedeploy-desa" {
           Service = "codedeploy.amazonaws.com"
         }
       },
+      {
+        "Effect" : "Allow",
+        "Action" : ["codedeploy:CreateDeployment"],
+        "Resource" : "*"
+      },
     ]
   })
 
