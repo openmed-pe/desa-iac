@@ -31,6 +31,7 @@ resource "aws_instance" "openmed-desa-api" {
     connection {
       agent       = false
       type        = "ssh"
+      host        = self.public_ip
       user        = "ec2-user"
       private_key = local.ec2_secretkey
     }
