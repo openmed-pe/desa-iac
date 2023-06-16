@@ -10,6 +10,7 @@ phases:
     commands:
       - mkdir artifact
       - mv dist artifact/
+      - mv scripts artifact/
       - mv appspec.yml artifact/
       - mv package.json artifact/
       - mv openmed-api.service artifact/
