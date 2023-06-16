@@ -109,7 +109,6 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
       configuration = {
         ApplicationName     = aws_codedeploy_app.openmed-codedeploy-buildApi-app.name
         DeploymentGroupName = aws_codedeploy_deployment_group.codedeploy-buildApi-group.deployment_group_name
-        AppSpecTemplatePath = "appspec.yml"
       }
     }
   }
