@@ -59,12 +59,12 @@ resource "aws_iam_role" "role-ec2codedeploy-desa" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment" {
+resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment1" {
   role       = aws_iam_role.role-ec2codedeploy-desa.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment" {
+resource "aws_iam_role_policy_attachment" "role-ec2codedeploy-desa-attachment2" {
   role       = aws_iam_role.role-ec2codedeploy-desa.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2RoleforAWSCodeDeploy"
 }
