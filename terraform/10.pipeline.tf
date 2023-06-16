@@ -102,7 +102,7 @@ resource "aws_codepipeline" "openmed-desa-api-pipeline" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "CodeDeployToEC2"
+      provider        = "CodeDeploy"
       input_artifacts = ["api-build-code"]
       version         = "1"
 
