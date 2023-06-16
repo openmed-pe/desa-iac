@@ -23,12 +23,7 @@ resource "aws_iam_role" "role-codedeploy-desa" {
         Principal = {
           Service = "codedeploy.amazonaws.com"
         }
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : ["codedeploy:CreateDeployment"],
-        "Resource" : "*"
-      },
+      }
     ]
   })
 
@@ -36,10 +31,30 @@ resource "aws_iam_role" "role-codedeploy-desa" {
     server = "desa"
   }
 }
+resource "aws_iam_policy" "policy-codedeploy-desa" {
+  name = "policy-codedeploy-desa"
+
+  policy = jsondecode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "codedeploy:CreateDeployment",
+        ]
+        Resource = "*"
+    }]
+  })
+}
 
 resource "aws_iam_role_policy_attachment" "role-codedeploy-desa-attachment" {
   role       = aws_iam_role.role-codedeploy-desa.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+}
+
+resource "aws_iam_role_policy_attachment" "role-codedeploy-desa-attachment1" {
+  role       = aws_iam_role.role-codedeploy-desa.id
+  policy_arn = aws_iam_policy.policy-codedeploy-desa.arn
 }
 
 resource "aws_iam_role" "role-ec2codedeploy-desa" {
