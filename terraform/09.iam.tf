@@ -32,16 +32,18 @@ resource "aws_iam_role" "role-codedeploy-desa" {
   }
 }
 resource "aws_iam_policy" "policy-codedeploy-desa" {
-  name = "policy-codedeploy-desa"
-
+  name        = "policy-codedeploy-desa"
+  path        = "/"
+  description = "Codedeploy policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
+        sid = ""
         Action = [
           "codedeploy:CreateDeployment",
         ]
+        Effect   = "Allow"
         Resource = "*"
     }]
   })
