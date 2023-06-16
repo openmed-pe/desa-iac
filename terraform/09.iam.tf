@@ -31,22 +31,23 @@ resource "aws_iam_role" "role-codedeploy-desa" {
     server = "desa"
   }
 }
+
+data "aws_iam_policy_document" "policies-codedeploy-desa" {
+  statement {
+    sid       = ""
+    actions   = ["codedeploy:CreateDeployment"]
+    resources = ["*"]
+    effect    = "Allow"
+  }
+}
+
+
 resource "aws_iam_policy" "policy-codedeploy-desa" {
   name        = "policy-codedeploy-desa"
   path        = "/"
   description = "Codedeploy policy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        sid = ""
-        Action = [
-          "codedeploy:CreateDeployment",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-    }]
-  })
+
+  policy = data.aws_iam_policy_document.policies-codedeploy-desa.json
 }
 
 resource "aws_iam_role_policy_attachment" "role-codedeploy-desa-attachment" {
